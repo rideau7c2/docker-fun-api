@@ -1,0 +1,14 @@
+FROM alpine/git:latest as checkout
+WORKDIR /code
+RUN git clone https://github.com/rideau7c2/docker-fun-api.git
+
+FROM gradle:6.3.0-jdk11 AS build
+COPY --chown=gradle:gradle --from=checkout /code/docker-fun-api /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon
+
+FROM openjdk:15-ea-10-jdk-alpine3.11
+RUN mkdir /app
+COPY --from=build /home/gradle/src/build/libs/docker-fun-api-0.0.1-SNAPSHOT.war /app/docker-fun-api-0.0.1-SNAPSHOT.war
+EXPOSE 18080
+CMD java -jar app/docker-fun-api-0.0.1-SNAPSHOT.war
