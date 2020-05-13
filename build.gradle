@@ -2,12 +2,11 @@ plugins {
 	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
-	id 'war'
 }
 
 group = 'com.gitlab.rideau7c2.'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '8'
 
 configurations {
 	developmentOnly
@@ -31,7 +30,7 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 //	implementation 'io.springfox:springfox-data-rest:2.9.2'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+//	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
