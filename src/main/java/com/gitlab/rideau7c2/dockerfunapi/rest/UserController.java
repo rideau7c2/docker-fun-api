@@ -4,6 +4,7 @@ import com.gitlab.rideau7c2.dockerfunapi.mongo.ConfirmToken;
 import com.gitlab.rideau7c2.dockerfunapi.mongo.ConfirmTokenRepository;
 import com.gitlab.rideau7c2.dockerfunapi.mongo.User;
 import com.gitlab.rideau7c2.dockerfunapi.mongo.UserRepository;
+import com.gitlab.rideau7c2.dockerfunapi.rest.dto.UserDto;
 import com.gitlab.rideau7c2.dockerfunapi.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,8 +38,13 @@ class UserController {
     String PATH;
 
     @PostMapping("/registration")
-    public void registerUserAccount(@RequestBody @Valid User user) {
-        user.setMatchingPassword(passwordEncoder.encode(user.getPassword()));
+    public void registerUserAccount(@RequestBody @Valid UserDto userDto) {
+        User user = new User();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword("hidden");
+        user.setMatchingPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEnabled(false);
         userRepository.save(user);
         String token = UUID.randomUUID().toString();
@@ -47,7 +53,7 @@ class UserController {
         confirmToken.setUser(user);
         confirmTokenRepository.save(confirmToken);
         String message = String.format("confirm: %s%s/user/confirm?token=%s", HOST_NAME, PATH, token);
-        emailService.send(user.getEmail(), "Utworzono konto", message);
+        emailService.send(userDto.getEmail(), "Utworzono konto", message);
     }
 
     @GetMapping("/confirm")
