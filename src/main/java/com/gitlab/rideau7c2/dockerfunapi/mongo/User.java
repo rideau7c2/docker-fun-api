@@ -1,6 +1,7 @@
 package com.gitlab.rideau7c2.dockerfunapi.mongo;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
@@ -25,11 +26,16 @@ public class User {
     @NotNull
     @NotEmpty
     private String password;
+    @Null
     private String matchingPassword;
 
     @NotNull
     @NotEmpty
+    @Indexed(unique = true)
     private String email;
+
+    @Null
+    private boolean enabled;
 
     public String getId() {
         return id;
@@ -77,5 +83,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

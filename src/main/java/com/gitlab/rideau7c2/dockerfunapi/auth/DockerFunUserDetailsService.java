@@ -28,7 +28,7 @@ public class DockerFunUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("No user found with username: " + email);
         }
-        boolean enabled = true;
+        boolean enabled = user.isEnabled();
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
